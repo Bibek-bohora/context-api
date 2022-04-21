@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React,{useEffect} from 'react'
+import Login from './components/Login'
+import Spotify from './utils/Spotify'
+import {useStateProvider} from "./utils/stateProvider"
+import { reducerCases } from './utils/constance'
 
-function App() {
+const App = () => {
+
+
+  
+  const [{ token }, dispatch] = useStateProvider();
+  useEffect(() => {
+    const hash=window.location.hash;
+    if(hash){
+      const token=hash.substring(1).split("&")[0].split('=')[1];
+      console.log(token)
+      dispatch({type:reducerCases.SET_TOKEN, token})
+    }  
+
+
+    document.title ="spotify"
+  }, [token, dispatch])
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+
+
+    {token? <Spotify/> :  <Login />}
+
+    
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
